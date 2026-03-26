@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>南崁國中115新生放棄入學表單</title>
+  <style>
+    body {
+      font-family: Arial, 'Microsoft JhengHei', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .container {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="tel"], input[type="date"], select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    .reason-details {
+      margin-top: 10px;
+      padding-left: 20px;
+      display: none;
+    }
+    .btn-submit {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;
+      margin: 20px auto 0;
+    }
+    .btn-submit:hover {
+      background-color: #45a049;
+    }
+    .deadline-notice {
+      text-align: center;
+      color: #d9534f;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .required::after {
+      content: " *";
+      color: red;
+    }
+    .response-message {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .success {
+      background-color: #dff0d8;
+      color: #3c763d;
+    }
+    .error {
+      background-color: #f2dede;
+      color: #a94442;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>南崁國中115新生放棄入學表單</h1>
+    </div>
+
+    <div class="deadline-notice">
+      請在 2026年4月20日 中午12點前完成填寫
+    </div>
+
+    <form id="withdrawalForm">
+      <div class="form-group">
+        <label for="studentName" class="required">學生姓名</label>
+        <input type="text" id="studentName" name="studentName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="id" class="required">身份證字號</label>
+        <input type="text" id="id" name="id" required>
+        <div id="idHint" style="color: #6c757d; font-size: 0.85em;">請輸入正確的身份證字號格式（首字為英文字母，共10碼）</div>
+      </div>
+
+      <div class="form-group">
+        <label for="gender" class="required">性別</label>
+        <select id="gender" name="gender" required>
+          <option value="">請選擇</option>
+          <option value="男">男</option>
+          <option value="女">女</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="birthday" class="required">生日</label>
+        <input type="date" id="birthday" name="birthday" required>
+      </div>
+
+      <div class="form-group">
+        <label for="parentName" class="required">填寫人姓名</label>
+        <input type="text" id="parentName" name="parentName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone" class="required">填寫人聯絡電話</label>
+        <input type="tel" id="phone" name="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label for="relationship" class="required">填表人與學生關係</label>
+        <select id="relationship" name="relationship" required>
+          <option value="">請選擇</option>
+          <option value="父親">父親</option>
+          <option value="母親">母親</option>
+          <option value="監護人">監護人</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="reason" class="required">放棄入學原因</label>
+        <select id="reason" name="reason" required>
+          <option value="">請選擇</option>
+          <option value="就讀他校">就讀他校</option>
+          <option value="出國讀書">出國讀書</option>
+          <option value="其他原因">其他原因</option>
+        </select>
+
+        <div id="otherSchoolDetail" class="reason-details">
+          <label for="otherSchool" class="required">就讀學校名稱</label>
+          <input type="text" id="otherSchool" name="otherSchool">
+        </div>
+
+        <div id="countryDetail" class="reason-details">
+          <label for="country" class="required">出國讀書國家</label>
+          <input type="text" id="country" name="country">
+        </div>
+
+        <div id="otherReasonDetail" class="reason-details">
+          <label for="otherReason" class="required">其他原因說明</label>
+          <input type="text" id="otherReason" name="otherReason">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">提交表單</button>
+    </form>
+
+    <div id="responseMessage" class="response-message"></div>
+  </div>
+
+  <script>
+    // ============================================================
+    // 請將下方 YOUR_GAS_WEB_APP_URL 替換為您部署的 GAS 網址
+    // 格式：https://script.google.com/macros/s/XXXXXXXXXX/exec
+    // ============================================================
+    var GAS_URL = 'https://script.google.com/a/macros/nkjh.tyc.edu.tw/s/AKfycbz9Da74vDNtEZIin8L9x3O92xQddu53y81UyfbdV9IjkRftRzutk25WQ4Z6KYB_gHqVOA/exec';
+
+    // 顯示對應的詳細原因輸入區
+    document.getElementById('reason').addEventListener('change', function() {
+      document.querySelectorAll('.reason-details').forEach(function(detail) {
+        detail.style.display = 'none';
+        detail.querySelectorAll('input').forEach(function(input) {
+          input.required = false;
+        });
+      });
+
+      var reason = this.value;
+      if (reason === '就讀他校') {
+        document.getElementById('otherSchoolDetail').style.display = 'block';
+        document.getElementById('otherSchool').required = true;
+      } else if (reason === '出國讀書') {
+        document.getElementById('countryDetail').style.display = 'block';
+        document.getElementById('country').required = true;
+      } else if (reason === '其他原因') {
+        document.getElementById('otherReasonDetail').style.display = 'block';
+        document.getElementById('otherReason').required = true;
+      }
+    });
+
+    // 身份證字號驗證
+    document.getElementById('id').addEventListener('input', function() {
+      var id = this.value.toUpperCase();
+      this.value = id;
+
+      var formatValid = /^[A-Z][12]\d{8}$/.test(id);
+
+      if (!formatValid) {
+        document.getElementById('idHint').style.color = '#dc3545';
+        document.getElementById('idHint').textContent = '請輸入正確的身份證字號格式（首字為英文字母，共10碼）';
+        return;
+      }
+
+      if (validateTaiwanID(id)) {
+        document.getElementById('idHint').style.color = '#28a745';
+        document.getElementById('idHint').textContent = '身份證字號格式正確';
+      } else {
+        document.getElementById('idHint').style.color = '#dc3545';
+        document.getElementById('idHint').textContent = '身份證字號檢查碼錯誤，請確認是否輸入正確';
+      }
+    });
+
+    function validateTaiwanID(id) {
+      id = id.toUpperCase();
+      var letterValues = {
+        'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15, 'G': 16, 'H': 17, 'I': 34,
+        'J': 18, 'K': 19, 'L': 20, 'M': 21, 'N': 22, 'O': 35, 'P': 23, 'Q': 24, 'R': 25,
+        'S': 26, 'T': 27, 'U': 28, 'V': 29, 'W': 32, 'X': 30, 'Y': 31, 'Z': 33
+      };
+      var letterValue = letterValues[id.charAt(0)];
+      var n1 = Math.floor(letterValue / 10);
+      var n2 = letterValue % 10;
+      var sum = n1 * 1 + n2 * 9;
+      for (var i = 1; i < 9; i++) {
+        sum += parseInt(id.charAt(i)) * (9 - i);
+      }
+      sum += parseInt(id.charAt(9));
+      return sum % 10 === 0;
+    }
+
+    // 表單提交處理
+    document.getElementById('withdrawalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var id = document.getElementById('id').value.toUpperCase();
+      if (!validateTaiwanID(id)) {
+        alert('身份證字號無效，請檢查後重新輸入。');
+        document.getElementById('id').focus();
+        return;
+      }
+
+      var now = new Date();
+      var deadline = new Date('2026-04-20T12:00:00+08:00');
+      if (now > deadline) {
+        var confirmSubmit = confirm('目前已超過4月20日中午12點的截止時間。您確定要繼續提交表單嗎？');
+        if (!confirmSubmit) return;
+      }
+
+      var formData = {
+        studentName: document.getElementById('studentName').value,
+        id: document.getElementById('id').value.toUpperCase(),
+        gender: document.getElementById('gender').value,
+        birthday: document.getElementById('birthday').value,
+        parentName: document.getElementById('parentName').value,
+        phone: document.getElementById('phone').value,
+        relationship: document.getElementById('relationship').value,
+        reason: document.getElementById('reason').value
+      };
+
+      if (formData.reason === '就讀他校') {
+        formData.otherSchool = document.getElementById('otherSchool').value;
+      } else if (formData.reason === '出國讀書') {
+        formData.country = document.getElementById('country').value;
+      } else if (formData.reason === '其他原因') {
+        formData.otherReason = document.getElementById('otherReason').value;
+      }
+
+      var btn = document.querySelector('.btn-submit');
+      btn.disabled = true;
+      btn.textContent = '提交中...';
+
+      // 改用 fetch 呼叫 GAS（不需要 Google 登入）
+      fetch(GAS_URL, {
+        method: 'POST',
+        // 使用 text/plain 避免 CORS preflight 問題
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(formData),
+        redirect: 'follow'
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(data) {
+        var responseMessage = document.getElementById('responseMessage');
+        responseMessage.textContent = data.message;
+        responseMessage.className = 'response-message ' + (data.success ? 'success' : 'error');
+        responseMessage.style.display = 'block';
+
+        if (data.success) {
+          document.getElementById('withdrawalForm').reset();
+          document.querySelectorAll('.reason-details').forEach(function(detail) {
+            detail.style.display = 'none';
+          });
+        }
+
+        btn.disabled = false;
+        btn.textContent = '提交表單';
+        responseMessage.scrollIntoView({ behavior: 'smooth' });
+      })
+      .catch(function(error) {
+        var responseMessage = document.getElementById('responseMessage');
+        responseMessage.textContent = '提交失敗，請稍後再試。';
+        responseMessage.className = 'response-message error';
+        responseMessage.style.display = 'block';
+
+        btn.disabled = false;
+        btn.textContent = '提交表單';
+        responseMessage.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
