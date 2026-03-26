@@ -302,14 +302,9 @@
       btn.disabled = true;
       btn.textContent = '提交中...';
 
-      // 改用 fetch 呼叫 GAS（不需要 Google 登入）
-      fetch(GAS_URL, {
-        method: 'POST',
-        // 使用 text/plain 避免 CORS preflight 問題
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(formData),
-        redirect: 'follow'
-      })
+      // 改用 GET + URL 參數呼叫 GAS（避免 CORS 及學校網域驗證問題）
+      var url = GAS_URL + '?data=' + encodeURIComponent(JSON.stringify(formData));
+      fetch(url, { redirect: 'follow' })
       .then(function(response) {
         return response.json();
       })
