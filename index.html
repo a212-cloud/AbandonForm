@@ -91,7 +91,7 @@
     </div>
 
     <div class="deadline-notice">
-      請在 2026年4月20日 中午12點前完成填寫
+      請在 2026年4月26日(日) 中午12點前完成填寫
     </div>
 
     <form id="withdrawalForm">
@@ -139,6 +139,10 @@
           <option value="監護人">監護人</option>
           <option value="其他">其他</option>
         </select>
+        <div id="otherRelationshipDetail" class="reason-details">
+          <label for="otherRelationship" class="required">請填寫與學生的親屬稱謂</label>
+          <input type="text" id="otherRelationship" name="otherRelationship" placeholder="例如：祖父、外婆、叔叔…">
+        </div>
       </div>
 
       <div class="form-group">
@@ -178,6 +182,20 @@
     // 格式：https://script.google.com/macros/s/XXXXXXXXXX/exec
     // ============================================================
     var GAS_URL = 'https://script.google.com/a/macros/nkjh.tyc.edu.tw/s/AKfycbz9Da74vDNtEZIin8L9x3O92xQddu53y81UyfbdV9IjkRftRzutk25WQ4Z6KYB_gHqVOA/exec';
+
+    // 填表人與學生關係：選「其他」時顯示親屬稱謂輸入欄
+    document.getElementById('relationship').addEventListener('change', function() {
+      var detail = document.getElementById('otherRelationshipDetail');
+      var input = document.getElementById('otherRelationship');
+      if (this.value === '其他') {
+        detail.style.display = 'block';
+        input.required = true;
+      } else {
+        detail.style.display = 'none';
+        input.required = false;
+        input.value = '';
+      }
+    });
 
     // 顯示對應的詳細原因輸入區
     document.getElementById('reason').addEventListener('change', function() {
@@ -253,7 +271,7 @@
       }
 
       var now = new Date();
-      var deadline = new Date('2026-04-20T12:00:00+08:00');
+      var deadline = new Date('2026-04-26T12:00:00+08:00');
       if (now > deadline) {
         var confirmSubmit = confirm('目前已超過4月20日中午12點的截止時間。您確定要繼續提交表單嗎？');
         if (!confirmSubmit) return;
@@ -266,7 +284,9 @@
         birthday: document.getElementById('birthday').value,
         parentName: document.getElementById('parentName').value,
         phone: document.getElementById('phone').value,
-        relationship: document.getElementById('relationship').value,
+        relationship: document.getElementById('relationship').value === '其他'
+          ? '其他(' + document.getElementById('otherRelationship').value + ')'
+          : document.getElementById('relationship').value,
         reason: document.getElementById('reason').value
       };
 
